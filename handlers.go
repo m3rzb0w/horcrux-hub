@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -30,5 +32,56 @@ func (a *application) handleWSOrderbook(ws *websocket.Conn) {
 		}
 		ws.Write([]byte(payload))
 		time.Sleep(time.Second * 1)
+	}
+}
+
+func (a *application) handleWS(ws *websocket.Conn) {
+	fmt.Println("new incoming connection from client:", ws.RemoteAddr())
+	a.conns[ws] = true
+
+	a.readLoop(ws)
+}
+
+func (a *application) readLoop(ws *websocket.Conn) {
+	defer ws.Close()
+	buf := make([]byte, 1024)
+	for {
+		var msg Message
+		n, err := ws.Read(buf)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			fmt.Println("read error:", err)
+			continue
+		}
+
+		err = json.Unmarshal(buf[:n], &msg)
+		if err != nil {
+			fmt.Println(err)
+			delete(a.conns, ws)
+			return
+		}
+		a.broadcast <- msg
+	}
+}
+
+func (a *application) HandleMessages() {
+	for {
+		msg := <-a.broadcast
+		msgBytes, err := json.Marshal(msg)
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return
+		}
+		for ws := range a.conns {
+			func(ws *websocket.Conn) {
+				if _, err := ws.Write(msgBytes); err != nil {
+					fmt.Println("write error:", err)
+					ws.Close()
+					delete(a.conns, ws)
+				}
+			}(ws)
+		}
 	}
 }

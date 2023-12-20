@@ -17,6 +17,7 @@ func (app *application) routes() http.Handler {
 
 	r.Get("/*", app.Home)
 	r.Handle("/countdown", websocket.Handler(app.handleWSOrderbook))
+	r.Handle("/ws", websocket.Handler(app.handleWS))
 
 	r.Get("/ping", app.Ping)
 	return r
