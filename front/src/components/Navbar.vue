@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { computed, markRaw, ref, onMounted, onUnmounted } from 'vue'
-import  ModalAbout  from './ModalAbout.vue'
+import ModalAbout from './ModalAbout.vue'
 import { useModal } from '../composables/useModal'
 import { onClickOutside } from '@vueuse/core'
 
@@ -10,8 +10,8 @@ const modal = useModal()
 
 const openConfirm = () => {
     console.log("toto")
-  modal.component.value = markRaw(ModalAbout)
-  modal.showModal()
+    modal.component.value = markRaw(ModalAbout)
+    modal.showModal()
 }
 
 const closeModal = () => {
@@ -25,15 +25,15 @@ onClickOutside(modalCardRef, closeModal)
 
 //escapte to close modal
 const handleKeyboard = (event: any) => {
-  if (event.key === "Escape") {
-      closeModal()
+    if (event.key === "Escape") {
+        closeModal()
     }
 }
 onMounted(() => {
-  document.addEventListener("keyup", handleKeyboard)
+    document.addEventListener("keyup", handleKeyboard)
 })
 onUnmounted(() => {
-  document.removeEventListener("keyup", handleKeyboard)
+    document.removeEventListener("keyup", handleKeyboard)
 })
 
 const router = useRouter()
@@ -61,37 +61,30 @@ const routeFiltered = currentRouter.value.filter(el => el.name !== 'home')
                                 <a class="navbar-item">{{ route.name }}</a>
                             </RouterLink>
                         </div>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item" @click="openConfirm">
-                            about
-                        </a>
                     </div>
                 </div>
+                <a class="navbar-item" @click="openConfirm">
+                    about
+                </a>
             </div>
         </div>
     </nav>
     <Teleport to="#modal" ref="modalCardRef">
         <Transition>
-            <component 
-            :is="modal.component.value"
-            v-if="modal.show.value"
-            @close="modal.hideModal"
-            />
+            <component :is="modal.component.value" v-if="modal.show.value" @close="modal.hideModal" />
         </Transition>
     </Teleport>
 </template>
 
 <style scoped>
-
 .v-enter-active,
 
 .v-leave-active {
-  transition: opacity 0.5s ease;
+    transition: opacity 0.5s ease;
 }
 
 .v-enter-from,
 .v-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
-
 </style>
