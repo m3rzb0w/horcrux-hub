@@ -1,0 +1,28 @@
+
+div.content {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+
+}
+
+div.body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    background-color: #000000;
+  }
+  .navbar-item.is-hoverable:hover .navbar-dropdown {
+    display: block !important;
+}
+.navbar-item.is-hoverable:focus-within .navbar-dropdown {
+    display: none;
+}
+}
