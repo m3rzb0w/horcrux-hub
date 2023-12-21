@@ -8,7 +8,7 @@ interface Message {
 
 const userName = ref<string>("")
 const userMessage = ref<string>("")
-const input = ref()
+const input = ref<HTMLElement>()
 const allMessages = reactive<Array<Message>>([]);
 const socket = new WebSocket(import.meta.env.VITE_WS_CHAT)
 
@@ -40,7 +40,7 @@ const sendMessage = () => {
 }
 
 const focusOnInput = () => {
-    input.value.focus()
+    input.value?.focus()
 }
 
 const handleKeyboard = (event: any) => {
@@ -60,8 +60,6 @@ onMounted(() =>{
 })
 
 
-
-
 </script>
 
 <template>
@@ -70,7 +68,6 @@ onMounted(() =>{
             <strong>{{ message.username }}</strong>: {{ message.message }}
         </div>
     </div>
-
         <div class="msg-inputs">
             <input type="text" id="userName" v-model="userName" placeholder="Nickname" />
             <input class="input is-primary is-normal" type="text" placeholder="Enter your message" v-model="userMessage" ref="input">
