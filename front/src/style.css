@@ -15,8 +15,8 @@ div.body {
   min-height: 100vh;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
+
+:root {
     background-color: #000000;
   }
   .navbar-item.is-hoverable:hover .navbar-dropdown {
@@ -25,4 +25,4 @@ div.body {
 .navbar-item.is-hoverable:focus-within .navbar-dropdown {
     display: none;
 }
-}
+
