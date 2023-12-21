@@ -33,7 +33,7 @@ div.test {
     /* Enable scroll if needed */
     place-items: center;
     /* display: flex; */
-    background-color: rgb(0, 0, 0, 0.6);
+    background-color: rgb(0, 0, 0, 0.9);
 }
 
 div.test-content {

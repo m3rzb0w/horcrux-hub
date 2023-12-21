@@ -9,7 +9,6 @@ import { onClickOutside } from '@vueuse/core'
 const modal = useModal()
 
 const openConfirm = () => {
-    console.log("toto")
     modal.component.value = markRaw(ModalAbout)
     modal.showModal()
 }

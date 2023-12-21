@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 
 interface Message {
     username: string,
-    message: string
+    message: string,
 }
 
 const userName = ref<string>("")
 const userMessage = ref<string>("")
+const input = ref()
 const allMessages = reactive<Array<Message>>([]);
 const socket = new WebSocket(import.meta.env.VITE_WS_CHAT)
 
 socket.onmessage = (event) => {
     allMessages.push(JSON.parse(event.data))
 }
+
+const reversedMessages = computed(() => allMessages.slice().reverse());
+
 
 const userNameCheck = () => {
     if (userName.value.trim() == "") {
@@ -35,41 +39,69 @@ const sendMessage = () => {
     }
 }
 
+const focusOnInput = () => {
+    input.value.focus()
+}
+
+const handleKeyboard = (event: any) => {
+    if (event.key === "Enter") {
+        sendMessage()
+    }
+}
+onMounted(() => {
+    document.addEventListener("keyup", handleKeyboard)
+})
+onUnmounted(() => {
+    document.removeEventListener("keyup", handleKeyboard)
+})
+
+onMounted(() =>{
+    focusOnInput()
+})
+
+
+
 
 </script>
 
 <template>
-    <div class="body">
-        <div class="content">
-            <h1 class="wip">
-                WIP
-            </h1>
-            <div>
-
-                <h2>All Messages</h2>
-                <ul>
-                    <li v-for="(message, index) in allMessages" :key="index">
-                        <strong>{{ message.username }}</strong>: {{ message.message }}
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" v-model="userName" />
-            </div>
-            <div>
-                <label for="message">Message:</label>
-                <input type="text" id="message" v-model="userMessage" />
-            </div>
-            <button @click="sendMessage">Add Message</button>
+    <div id="messages">
+        <div class="" v-for="(message, index) in reversedMessages" :key="index">
+            <strong>{{ message.username }}</strong>: {{ message.message }}
         </div>
     </div>
+
+        <div class="msg-inputs">
+            <input type="text" id="userName" v-model="userName" placeholder="Nickname" />
+            <input class="input is-primary is-normal" type="text" placeholder="Enter your message" v-model="userMessage" ref="input">
+            <button class="button is-primary is-outlined" @click="sendMessage">Send</button>
+        </div>
 </template>
 
 <style scoped>
-h1.wip {
-    font-size: 3.2em;
-    line-height: 1.1;
-    color: #57e389
+
+
+#messages {
+    margin: auto;
+    /* margin-top: 5vh; */
+    background-color: rgb(190, 199, 199);
+    display: flex;
+    flex-direction: column-reverse;
+    height: 90%;
+    width: 100%;
+    overflow-y: scroll;
+    padding-left: 5px;
+    word-wrap: break-word;
+    position: fixed;
 }
+
+.msg-inputs{
+   position: fixed;
+   bottom: 0;
+   display: flex;
+   width: 100%;
+}
+        
+
+  
 </style>
