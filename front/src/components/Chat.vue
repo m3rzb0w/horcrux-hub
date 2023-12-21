@@ -69,7 +69,7 @@ onMounted(() =>{
         </div>
     </div>
         <div class="msg-inputs">
-            <input type="text" id="userName" v-model="userName" placeholder="Nickname" />
+            <input class="input" type="text" id="userName" v-model="userName" placeholder="Nickname" />
             <input class="input is-primary is-normal" type="text" placeholder="Enter your message" v-model="userMessage" ref="input">
             <button class="button is-primary is-outlined" @click="sendMessage">Send</button>
         </div>
@@ -77,6 +77,9 @@ onMounted(() =>{
 
 <style scoped>
 
+#userName {
+    width: 10%;
+}
 
 #messages {
     margin: auto;

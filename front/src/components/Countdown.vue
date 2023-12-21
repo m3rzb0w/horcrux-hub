@@ -27,4 +27,12 @@ h1.countdown {
   line-height: 1.1;
   color: #57e389
 }
+
+div.body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 80vh;
+}
 </style>
